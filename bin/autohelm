@@ -40,9 +40,10 @@ def cli(ctx, log_level, *args, **kwargs):
 @click.option("--debug", is_flag=True, help="Pass --debug to helm")
 @click.option("--heading", "--only", metavar="<chart>", help="Only run a specific chart by name", multiple=True)
 @click.option("--local-development", is_flag=True, default=False, help="Run `autohelm` in local-development mode where Tiller is not required and no helm commands are run. Useful for rapid or offline development.")
-def plot(ctx, file=None, dry_run=False, debug=False, only=None, local_development=False):
+@click.option("--set", multiple=True, help="Passes --set parameters to helm")
+def plot(ctx, file=None, dry_run=False, debug=False, only=None, local_development=False, set=None):
     """ Install charts with given arguments as listed in yaml file argument """
-    h = AutoHelm(file=file, dryrun=dry_run, debug=debug, charts=only, local_development=local_development)
+    h = AutoHelm(file=file, dryrun=dry_run, debug=debug, charts=only, local_development=local_development, set=set)
     h.install()
 
 

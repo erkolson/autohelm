@@ -34,12 +34,13 @@ class AutohelmException(Exception):
 
 class AutoHelm(object):
 
-    def __init__(self, file=None, dryrun=False, debug=False, charts=None, local_development=False ):
+    def __init__(self, file=None, dryrun=False, debug=False, charts=None, local_development=False, set=None):
 
         self._home = os.environ.get('HELM_HOME')
         self._dryrun = dryrun
         self._debug = debug
         self._local_development = local_development
+        self._sets = set
         if self._local_development:
             logging.info("Local Development is ON")
 
@@ -371,6 +372,9 @@ class AutoHelm(object):
         for key, value in chart.get('values-strings', {}).iteritems():
             for k, v in self._format_set(key, value):
                 args.append("--set-string={}={}".format(k, v))
+
+        for keyvalue in self._sets:
+            args.append("--set={}".format(keyvalue))
 
         args.append('--namespace={}'.format(chart.get('namespace', self._namespace)))
 
